@@ -50,6 +50,7 @@
             gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         .meta-item {
@@ -65,7 +66,6 @@
             display: flex;
             gap: 10px;
             justify-content: center;
-            margin-top: 20px;
             flex-wrap: wrap;
         }
 
@@ -157,17 +157,43 @@
             background: #fff5f5;
         }
 
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
         .news-title {
             font-size: 1.1em;
             font-weight: bold;
             color: #333;
-            margin-bottom: 8px;
+            flex: 1;
+        }
+
+        .news-date {
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            white-space: nowrap;
+            font-weight: bold;
         }
 
         .news-content {
             color: #555;
             line-height: 1.6;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+        }
+
+        .news-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .news-meta {
@@ -187,10 +213,29 @@
             font-weight: bold;
         }
 
-        .category {
+        .source {
             background: #f0f0f0;
-            padding: 3px 10px;
-            border-radius: 12px;
+            color: #666;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+        }
+
+        .read-more {
+            background: #667eea;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .read-more:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
         }
 
         .empty {
@@ -279,6 +324,25 @@
             button {
                 width: 100%;
             }
+
+            .news-header {
+                flex-direction: column;
+            }
+
+            .news-date {
+                width: 100%;
+                text-align: center;
+            }
+
+            .news-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .read-more {
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -286,7 +350,7 @@
     <div class="container">
         <header>
             <h1>📰 News Dashboard</h1>
-            <p class="subtitle">Tägliche Nachrichten - Welt, Deutschland, Ingolstadt</p>
+            <p class="subtitle">Tägliche aktuelle Nachrichten mit echten Quellen</p>
             
             <div class="meta">
                 <div class="meta-item">📅 <span id="updateDate">Lädt...</span></div>
@@ -311,6 +375,7 @@
 
         <div class="footer">
             <p>🌍 Von überall erreichbar | 🤖 Automatische Updates um 6:00 Uhr | 📝 <a href="https://github.com" target="_blank">Auf GitHub ändern</a></p>
+            <p style="margin-top: 10px; font-size: 0.85em;">Nachrichten von NewsAPI.org - Echte aktuelle Meldungen von großen Nachrichtenquellen</p>
         </div>
     </div>
 
@@ -365,17 +430,29 @@
                     <div class="news-items">`;
 
                 if (items.length === 0) {
-                    sectionHtml += '<div class="empty">Keine Nachrichten</div>';
+                    sectionHtml += '<div class="empty">Keine Nachrichten verfügbar</div>';
                 } else {
                     for (const item of items) {
                         const hotClass = item.is_hot ? ' hot' : '';
+                        const dateStr = item.date ? item.date : '---';
+                        const timeStr = item.time ? item.time : '';
+                        const source = item.source || 'News';
+                        const url = item.url || '#';
+                        const hasUrl = url !== '#';
+
                         sectionHtml += `
                             <div class="news-item${hotClass}">
-                                <div class="news-title">${item.title}</div>
+                                <div class="news-header">
+                                    <div class="news-title">${item.title}</div>
+                                    <div class="news-date">${dateStr} ${timeStr}</div>
+                                </div>
                                 <div class="news-content">${item.content}</div>
-                                <div class="news-meta">
-                                    <span class="label">${item.category}</span>
-                                    <span class="category">${item.region}</span>
+                                <div class="news-footer">
+                                    <div class="news-meta">
+                                        <span class="label">${item.category}</span>
+                                        <span class="source">📰 ${source}</span>
+                                    </div>
+                                    ${hasUrl ? `<a href="${url}" target="_blank" class="read-more">Artikel lesen →</a>` : ''}
                                 </div>
                             </div>`;
                     }
