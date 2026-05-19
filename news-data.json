@@ -1,20 +1,27 @@
-```json
 {
   "update_date": "2026-05-19",
   "update_time": "06:00",
   "categories": {
     "world": [
-      {"title": "ISIS-Anführer eliminiert", "content": "USA und Nigeria Operation erfolgreich", "category": "Sicherheit", "region": "International", "is_hot": true},
-      {"title": "Trump trifft Xi Jinping", "content": "Gipfel diskutiert Handelskonflikte", "category": "Diplomatie", "region": "China/USA", "is_hot": false}
+      {
+        "title": "Test Nachricht Welt",
+        "content": "Das ist eine Test-Nachricht",
+        "category": "Test",
+        "region": "International",
+        "is_hot": false
+      }
     ],
     "germany": [
-      {"title": "Mercedes erwägt Rüstung", "content": "Automobilhersteller sieht neue Chancen", "category": "Wirtschaft", "region": "Deutschland", "is_hot": false}
+      {
+        "title": "Test Nachricht Deutschland",
+        "content": "Das ist eine Test-Nachricht",
+        "category": "Test",
+        "region": "Deutschland",
+        "is_hot": false
+      }
     ],
-    "ingolstadt": [
-      {"title": "ERC Ingolstadt Playoffs", "content": "Spannung um Halbfinale-Einzug", "category": "Sport", "region": "Ingolstadt", "is_hot": true}
-    ],
+    "ingolstadt": [],
     "tech": [],
     "sports": []
   }
 }
-```
