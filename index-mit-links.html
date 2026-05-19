@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📰 News Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #999;
+            font-size: 1.05em;
+            margin-bottom: 20px;
+        }
+
+        .meta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .meta-item {
+            background: #f0f0f0;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 0.95em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-refresh {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-edit {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-edit:hover {
+            background: #e0e0e0;
+        }
+
+        .sections {
+            display: grid;
+            gap: 25px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.15);
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .section-header.world { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .section-header.germany { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        .section-header.ingolstadt { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+        .section-header.tech { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .section-header.sports { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+
+        .news-items {
+            padding: 25px;
+        }
+
+        .news-item {
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .news-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .news-item:hover {
+            background: #f0f0f0;
+            transform: translateX(5px);
+        }
+
+        .news-item.hot {
+            border-left-color: #f5576c;
+            background: #fff5f5;
+        }
+
+        .news-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .news-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #333;
+            flex: 1;
+        }
+
+        .news-date {
+            background: #667eea;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            white-space: nowrap;
+            font-weight: bold;
+        }
+
+        .news-content {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .news-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .news-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 0.85em;
+            color: #999;
+            flex-wrap: wrap;
+        }
+
+        .label {
+            background: #667eea;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .source {
+            background: #f0f0f0;
+            color: #666;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.85em;
+        }
+
+        .read-more {
+            background: #667eea;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.85em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .read-more:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .empty {
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid #f0f0f0;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            border-bottom: 1px solid white;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .section-header {
+                font-size: 1.2em;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .news-header {
+                flex-direction: column;
+            }
+
+            .news-date {
+                width: 100%;
+                text-align: center;
+            }
+
+            .news-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .read-more {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📰 News Dashboard</h1>
+            <p class="subtitle">Tägliche aktuelle Nachrichten mit echten Quellen</p>
+            
+            <div class="meta">
+                <div class="meta-item">📅 <span id="updateDate">Lädt...</span></div>
+                <div class="meta-item">🕐 <span id="updateTime">--:--</span></div>
+                <div class="meta-item">📊 <span id="totalArticles">0</span> Artikel</div>
+            </div>
+
+            <div class="controls">
+                <button class="btn-refresh" onclick="refreshNews()">🔄 Aktualisieren</button>
+                <button class="btn-edit" onclick="editOnGitHub()">✏️ Auf GitHub bearbeiten</button>
+            </div>
+
+            <div id="message" class="message"></div>
+        </header>
+
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Nachrichten werden geladen...</p>
+        </div>
+
+        <div id="content" class="sections"></div>
+
+        <div class="footer">
+            <p>🌍 Von überall erreichbar | 🤖 Automatische Updates um 6:00 Uhr | 📝 <a href="https://github.com" target="_blank">Auf GitHub ändern</a></p>
+            <p style="margin-top: 10px; font-size: 0.85em;">Nachrichten von NewsAPI.org - Echte aktuelle Meldungen von großen Nachrichtenquellen</p>
+        </div>
+    </div>
+
+    <script>
+        const categoryNames = {
+            'world': '🌍 Weltnachrichten',
+            'germany': '🇩🇪 Deutschland',
+            'ingolstadt': '🏛️ Ingolstadt & Region',
+            'tech': '💻 Technologie',
+            'sports': '⚽ Sport & Freizeit'
+        };
+
+        const categoryClasses = {
+            'world': 'world',
+            'germany': 'germany',
+            'ingolstadt': 'ingolstadt',
+            'tech': 'tech',
+            'sports': 'sports'
+        };
+
+        async function loadNews() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                const response = await fetch('news-data.json?t=' + Date.now());
+                
+                if (!response.ok) throw new Error('Datei nicht gefunden');
+                
+                const data = await response.json();
+                displayNews(data);
+                
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error('Fehler beim Laden:', error);
+                document.getElementById('content').innerHTML = '<div class="empty">❌ Fehler beim Laden der Nachrichten. Bitte später versuchen.</div>';
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        function displayNews(data) {
+            document.getElementById('updateDate').textContent = data.update_date || '---';
+            document.getElementById('updateTime').textContent = data.update_time || '--:--';
+
+            let totalArticles = 0;
+            let html = '';
+
+            for (const [key, name] of Object.entries(categoryNames)) {
+                const items = data.categories[key] || [];
+                totalArticles += items.length;
+
+                let sectionHtml = `<div class="section">
+                    <div class="section-header ${categoryClasses[key]}">${name}</div>
+                    <div class="news-items">`;
+
+                if (items.length === 0) {
+                    sectionHtml += '<div class="empty">Keine Nachrichten verfügbar</div>';
+                } else {
+                    for (const item of items) {
+                        const hotClass = item.is_hot ? ' hot' : '';
+                        const dateStr = item.date ? item.date : '---';
+                        const timeStr = item.time ? item.time : '';
+                        const source = item.source || 'News';
+                        const url = item.url || '#';
+                        const hasUrl = url !== '#';
+
+                        sectionHtml += `
+                            <div class="news-item${hotClass}">
+                                <div class="news-header">
+                                    <div class="news-title">${item.title}</div>
+                                    <div class="news-date">${dateStr} ${timeStr}</div>
+                                </div>
+                                <div class="news-content">${item.content}</div>
+                                <div class="news-footer">
+                                    <div class="news-meta">
+                                        <span class="label">${item.category}</span>
+                                        <span class="source">📰 ${source}</span>
+                                    </div>
+                                    ${hasUrl ? `<a href="${url}" target="_blank" class="read-more">Artikel lesen →</a>` : ''}
+                                </div>
+                            </div>`;
+                    }
+                }
+
+                sectionHtml += '</div></div>';
+                html += sectionHtml;
+            }
+
+            document.getElementById('content').innerHTML = html;
+            document.getElementById('totalArticles').textContent = totalArticles;
+        }
+
+        function refreshNews() {
+            location.reload();
+        }
+
+        function editOnGitHub() {
+            const username = prompt('Gib deinen GitHub-Benutzernamen ein:');
+            if (username) {
+                window.open(`https://github.com/${username}/news-dashboard/edit/main/news-data.json`);
+            }
+        }
+
+        // Lade News beim Seitenladen
+        window.addEventListener('load', loadNews);
+
+        // Auto-refresh alle 5 Minuten
+        setInterval(loadNews, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
