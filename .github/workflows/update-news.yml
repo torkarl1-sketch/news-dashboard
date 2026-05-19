@@ -1,0 +1,27 @@
+```yaml
+name: Update News Daily
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Update timestamp
+        run: |
+          DATE=$(date '+%Y-%m-%d')
+          TIME=$(date '+%H:%M')
+          sed -i "s/\"update_date\": \"[^\"]*\"/\"update_date\": \"$DATE\"/" news-data.json
+          sed -i "s/\"update_time\": \"[^\"]*\"/\"update_time\": \"$TIME\"/" news-data.json
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "News Bot"
+          git add news-data.json
+          git commit -m "📰 Auto-update: $(date '+%d.%m.%Y %H:%M')" || exit 0
+          git push
+```
