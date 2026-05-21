@@ -1,6 +1,6 @@
 {
   "update_date": "2026-05-21",
-  "update_time": "06:01",
+  "update_time": "16:29",
   "categories": {
     "world": [
       {
@@ -9,7 +9,7 @@
         "category": "News",
         "region": "World",
         "date": "2026-05-21",
-        "time": "06:01",
+        "time": "16:29",
         "source": "News",
         "url": "https://news.de",
         "is_hot": false
