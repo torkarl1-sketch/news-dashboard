@@ -1,0 +1,19 @@
+name: Update News
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install requests
+      - run: python update_news.py
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: 'Update news'
+          add: 'news-data.json'
