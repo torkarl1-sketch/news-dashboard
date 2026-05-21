@@ -1,13 +1,23 @@
-
 {
-  "update_date": "2026-05-19",
-  "update_time": "06:00",
+  "update_date": "2026-05-21",
+  "update_time": "06:01",
   "categories": {
-    "world": [],
+    "world": [
+      {
+        "title": "Neue Nachrichten",
+        "content": "Dashboard aktualisiert",
+        "category": "News",
+        "region": "World",
+        "date": "2026-05-21",
+        "time": "06:01",
+        "source": "News",
+        "url": "https://news.de",
+        "is_hot": false
+      }
+    ],
     "germany": [],
     "ingolstadt": [],
     "tech": [],
     "sports": []
   }
 }
-
