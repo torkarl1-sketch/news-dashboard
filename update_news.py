@@ -1,27 +1,25 @@
-#!/usr/bin/env python3
-import requests
-import json
-import os
-from datetime import datetime
+name: Update News with Real Data
 
-api_key = os.environ.get("NEWS_API_KEY")
-if not api_key:
-    print("ERROR: NEWS_API_KEY not set")
-    exit(1)
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
 
-news_data = {
-    "update_date": datetime.now().strftime("%Y-%m-%d"),
-    "update_time": datetime.now().strftime("%H:%M"),
-    "categories": {
-        "world": [{"title": "Breaking: International News", "content": "Latest updates", "category": "World", "region": "International", "date": datetime.now().strftime("%Y-%m-%d"), "time": datetime.now().strftime("%H:%M"), "source": "News", "url": "https://newsapi.org", "is_hot": False}],
-        "germany": [],
-        "ingolstadt": [],
-        "tech": [],
-        "sports": []
-    }
-}
-
-with open("news-data.json", "w") as f:
-    json.dump(news_data, f, ensure_ascii=False, indent=2)
-    
-print("News updated!")
+jobs:
+  update-news:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - run: pip install requests
+      - env:
+          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
+        run: python update_news.py
+      - run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "News Bot"
+          git add news-data.json
+          git commit -m "Update news" || exit 0
+          git push
