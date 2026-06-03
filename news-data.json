@@ -1,6 +1,6 @@
 {
-  "update_date": "2026-06-02",
-  "update_time": "19:01",
+  "update_date": "2026-06-03",
+  "update_time": "19:59",
   "categories": {
     "world": [
       {
@@ -8,8 +8,8 @@
         "content": "Dashboard aktualisiert",
         "category": "News",
         "region": "World",
-        "date": "2026-06-02",
-        "time": "19:01",
+        "date": "2026-06-03",
+        "time": "19:59",
         "source": "News",
         "url": "https://news.de",
         "is_hot": false
